@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  mongodb:
+      image: mongo
+      container_name: mongodb
+      ports:
+        - 27018:27017
+      volumes:
+        - mongodb:/data/db
+        - mongodb_config:/data/configdb
+      environment:
+        - MONGO_INITDB_HOST=mongodb
+        - MONGO_INITDB_DB_NAME=whatsapp-spring
+      command: mongod
+  mongo-express:
+      image: mongo-express
+      container_name: mongo-express
+      restart: always
+      ports:
+        - 8082:8081
+      depends_on:
+        - mongodb
+      volumes:
+        - mongodb:/data/db
+        - mongodb_config:/data/configdb
+      environment:
+        - ME_CONFIG_MONGODB_SERVER=mongodb
+        - ME_CONFIG_MONGODB_PORT=27017
+        - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+        - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+        - ME_CONFIG_BASICAUTH_USERNAME=mongo_spring_admin
+        - ME_CONFIG_BASICAUTH_PASSWORD=ef95f0dd-6fc9-4672-8049-2f88a95fce5a
+volumes:
+  mongodb:
+  mongodb_config:
+
+
+#networks:
+#  default:
+#    name: mongodb_network
+
+
+

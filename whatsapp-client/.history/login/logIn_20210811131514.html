@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body style="direction: rtl">
+    <div class="conteiner">
+        <h1>כניסה לוואטספ שלי</h1>
+        <div class="form">
+            <div class="wrap-inputs">
+
+                <div class="lables ">
+                    <label for="">אימייל :</label>
+                    <label for="">סיסמא :</label>
+                </div>
+
+                <div class="inputs ">
+                    <input type="text" id="inputEmail" placeholder=" אימייל   " type="text">
+                    <input type="password" id="inputPassword" placeholder="סיסמא " type="text">
+                </div>
+
+            </div>
+            <h3 id="error"></h3><br>
+            <button id="submit" type="submit" onclick="getFormSubmit(inputEmail.value,inputPassword.value)">שלח</button>
+        </div>
+    </div>
+    <script>
+        let url = "http://localhost:8080/api/v1/connect/login"
+        function getFormSubmit(email, password) {
+            let errorSpan = document.getElementById("error")
+            if (email == "" || password == "") {
+                errorSpan.innerText = "פרטים לא מלאים";
+                errorSpan.style.display = "block"
+            }
+            else {
+
+                var xhttp = new XMLHttpRequest();
+                let dataJson = { "username": email,"password":password}
+                console.log(dataJson);
+                xhttp.open("POST", url, true);
+                xhttp.setRequestHeader('Content-Type', 'application/json');
+                xhttp.send(JSON.stringify(dataJson));
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let result = xhttp.responseText  
+                        console.log(result);
+                                              
+                        const valParse = JSON.parse(`{${result}}`) 
+                         for(i in valParse){               
+                        localStorage.setItem("username",valParse[i].email);
+                        localStorage.setItem("name",valParse[i].name);
+                        localStorage.setItem("lastname",valParse[i].lastname);
+                        window.location.href = "../whatsapp/whatsapp.html"; 
+                    }
+                }
+                if(xhttp.responseText !=""){
+                    errorSpan.innerText = xhttp.responseText;
+                    errorSpan.style.display = "block"
+                }
+                }
+            }
+        }
+
+    </script>
+</body>
+
+</html>

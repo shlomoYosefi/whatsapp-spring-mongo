@@ -1,0 +1,71 @@
+
+.conteiner{
+    margin-top: 140px;
+}
+
+
+h1{
+    text-align: center;
+    font-size: 50px;
+    color: brown
+}
+
+
+.form{
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-top: 100px;
+    background-color: antiquewhite;
+    min-width: 600px;
+    max-width: 700px;
+    height: 380px;
+    margin: auto;
+}
+.wrap-inputs{
+    padding-top: 35px;
+    display: flex;
+    justify-content: center
+}
+
+.lables{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+input{
+    height: 30px;
+    text-align: center;
+    margin-bottom: 8px;
+
+}
+label{
+    margin-bottom: 8px;
+    font-size: 30px;
+    height: 36px;
+}
+
+#submit{
+    background-color: brown;
+    color: aliceblue;
+    width: 90px;
+    height: 30px;
+    /* margin-top: 25px; */
+}
+
+#error{
+    margin: auto;
+    display: none;
+    background-color: red;
+    color: aliceblue;
+    width: 40%;
+    height: 25px;
+
+}
