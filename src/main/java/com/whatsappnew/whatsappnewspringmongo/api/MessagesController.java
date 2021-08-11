@@ -6,6 +6,8 @@ import com.whatsappnew.whatsappnewspringmongo.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -27,22 +29,22 @@ public class MessagesController {
 
 
     @PostMapping()
-    public List<MessageSingel> addMessage(@RequestBody MessageSingel messageSingel){
+    public ResponseEntity<List<MessageSingel>> addMessage(@RequestBody MessageSingel messageSingel){
         return messageService.addMessage( messageSingel);
     }
 
     @GetMapping("/getMessages")
-    public List<MessageSingel> getMessagesByUser(@PathParam("sender") String sender, @PathParam("reciver") String reciver){
+    public ResponseEntity<List<MessageSingel>> getMessagesByUser(@PathParam("sender") String sender, @PathParam("reciver") String reciver){
         return messageService.getAllMessageByUserId(sender,reciver);
     }
 
     @DeleteMapping()
-    public String deleteMessage(@PathParam("id") String id ,@PathParam("sender") String sender){
+    public ResponseEntity deleteMessage(@PathParam("id") String id ,@PathParam("sender") String sender){
         return messageService.deleteMessage(id,sender);
     }
 
     @GetMapping("getMessagesOfSender")
-    public List<MessageSingel> getMessagesOfSender(@PathParam("sender") String sender){
+    public ResponseEntity<List<MessageSingel>> getMessagesOfSender(@PathParam("sender") String sender){
        return messageService.getMessagesOfSender(sender);
     }
 

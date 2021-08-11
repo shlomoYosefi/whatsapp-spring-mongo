@@ -26,20 +26,13 @@ public class LogInController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String register( @RequestBody UserOfWhatsapp user){
-        System.out.println("add user controller");
-        System.out.println(user);
-        userService.addUser(user);
-//        return "success add user:  " + user.toString();
-                return "success add user:  " ;
-
+    public ResponseEntity register( @RequestBody UserOfWhatsapp user){
+                return userService.addUser(user);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @NonNull Login user){
-        System.out.println(user.getPassword());
-        System.out.println(user.getUsername());
-        return ResponseEntity.status(HttpStatus.OK).body(userService.login(user));
+        return userService.login(user);
     }
 
 }

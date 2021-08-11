@@ -36,7 +36,7 @@ public class MessageService {
         this.groupRepo = groupRepo;
     }
 
-    public List<MessageSingel> addMessage(MessageSingel message){
+    public ResponseEntity<List<MessageSingel>> addMessage(MessageSingel message){
         message.setReceiverName(userRepo.findByEmail(message.getReceiverId()).getName() +"  " + userRepo.findByEmail(message.getReceiverId()).getLastName());
         message.setSenderName(userRepo.findByEmail(message.getSenderId()).getName() +"  " + userRepo.findByEmail(message.getSenderId()).getLastName());
         message.setDateTime(new Date());
@@ -44,51 +44,51 @@ public class MessageService {
         message.setDateString(date[0]);
         message.setTimeStyring(date[2]);
         messagesRepo.insert(message);
-        List<MessageSingel> msg = getAllMessageByUserId(message.getSenderId(),message.getReceiverId());
+        List<MessageSingel> msg = (List<MessageSingel>) getAllMessageByUserId(message.getSenderId(),message.getReceiverId());
         Collections.sort(msg);
-        return msg;
+        return ResponseEntity.status(HttpStatus.OK).body(msg);
     }
 
-    public List<MessageSingel> getAllMessageByUserId(String sender , String reciver){
+    public ResponseEntity<List<MessageSingel>> getAllMessageByUserId(String sender , String reciver){
         List<MessageSingel> newList = Stream.concat(messagesRepo.findBySenderIdAndReceiverId(sender,reciver).stream(), messagesRepo.findBySenderIdAndReceiverId(reciver,sender).stream())
                 .collect(Collectors.toList());
         Collections.sort(newList);
-        return newList;
+        return ResponseEntity.status(HttpStatus.OK).body(newList);
     }
 
-    public String deleteMessage(String id ,String idSender){
+    public ResponseEntity deleteMessage(String id ,String idSender){
         if(messagesRepo.findById(id).get().getSenderId().equals(idSender)){
             messagesRepo.deleteById(id);
             System.out.println("success");
-            return "success";
+            return ResponseEntity.status(HttpStatus.OK).body("success");
         }
-        return "You can not delete this message";
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("You can not delete this message");
 
     }
 
-    public List<MessageSingel> getMessagesOfSender(String sender){
+    public ResponseEntity<List<MessageSingel>> getMessagesOfSender(String sender){
         List<MessageSingel> newList = Stream.concat(messagesRepo.findBySenderId(sender).stream(), messagesRepo.findByReceiverId(sender).stream())
                 .collect(Collectors.toList());
         Collections.sort(newList);
-       return newList;
+        return ResponseEntity.status(HttpStatus.OK).body(newList);
     }
 
 
 
-    public List<MessageGrup> addMessageToGroup(MessageGrup message){
+    public ResponseEntity<List<MessageGrup>> addMessageToGroup(MessageGrup message){
         message.setNameSender(userRepo.findByEmail(message.getSenderId()).getName() +"  " + userRepo.findByEmail(message.getSenderId()).getLastName());
         String[] date = FunctionsGenerics.getDate().split(" ");
         System.out.println(date);
         message.setDateString(date[0]);
         message.setTimeStyring(date[2]);
         messagesGroupsRepo.insert(message);
-        return getAllMessageByGroup(message.getNameGrup());
+        return ResponseEntity.status(HttpStatus.OK).body((List<MessageGrup>) getAllMessageByGroup(message.getNameGrup()));
     }
 
-    public List<MessageGrup> getAllMessageByGroup(String name){
+    public ResponseEntity<List<MessageGrup>> getAllMessageByGroup(String name){
         List<MessageGrup> message = messagesGroupsRepo.findByNameGrup(name);
         Collections.sort(message);
-        return message;
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 
     public ResponseEntity deleteMessageFromGroup(String id, String sender){

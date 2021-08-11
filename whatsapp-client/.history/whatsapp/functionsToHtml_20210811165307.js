@@ -167,7 +167,6 @@ function sendMessageToGroup() {
 }
 
 
-
 function getAllUsers(){
     routerFunctions("GET",`${urlUsers}`,getUsers);
 }
@@ -280,8 +279,7 @@ function selectMenue(id){
 
 
 function printResult(val){
-    var result = JSON.parse(val);
-    alert(result);
+    alert(val);
     return
 }
 

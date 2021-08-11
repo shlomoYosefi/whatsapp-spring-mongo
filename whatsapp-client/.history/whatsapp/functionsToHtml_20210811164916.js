@@ -115,7 +115,7 @@ function addGroupName(){
     if(textName !=""){
         addGroup.style.display = "none";
         let dataJson = { "name": textName, "creator": currentUser}
-        routerFunctions("POST",`${urlGroups}`,getAllGroups,dataJson);
+        routerFunctions("POST",`${urlGroups}`,printResult,dataJson);
     }
 }
 
@@ -165,7 +165,6 @@ function sendMessageToGroup() {
     routerFunctions("POST", `${urlMessagesGroup}`, getAllMessagesOfGroups, dataJson)
     sendText.value = "";
 }
-
 
 
 function getAllUsers(){
@@ -280,8 +279,7 @@ function selectMenue(id){
 
 
 function printResult(val){
-    var result = JSON.parse(val);
-    alert(result);
+    alert(val);
     return
 }
 
@@ -303,7 +301,7 @@ function routerFunctions(method, url, callBack, data) {
         xhttp.onreadystatechange = function () {
 
             if (this.readyState == 4 && this.status == 200) {
-                console.log(xhttp.responseText);  
+                  
                 if (callBack) {
                     callBack(xhttp.responseText)
                 }

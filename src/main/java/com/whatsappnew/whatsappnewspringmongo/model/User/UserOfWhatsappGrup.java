@@ -42,11 +42,11 @@ public class UserOfWhatsappGrup{
     }
 
 
-    public String addUser(UserOfWhatsapp user){
-        if( users.contains(user.getUserName())) {
+    public String addUser(String user){
+        if( users.contains(user)) {
             return "There is such a user in the system";
         }
-        users.add(user.getUserName());
+        users.add(user);
         return "success";
     }
 

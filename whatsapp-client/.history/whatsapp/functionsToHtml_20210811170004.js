@@ -280,8 +280,8 @@ function selectMenue(id){
 
 
 function printResult(val){
-    var result = JSON.parse(val);
-    alert(result);
+    var result = JSON.parse(s);
+    alert(val);
     return
 }
 

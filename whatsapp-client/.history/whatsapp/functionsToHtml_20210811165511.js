@@ -115,7 +115,7 @@ function addGroupName(){
     if(textName !=""){
         addGroup.style.display = "none";
         let dataJson = { "name": textName, "creator": currentUser}
-        routerFunctions("POST",`${urlGroups}`,getAllGroups,dataJson);
+        routerFunctions("POST",`${urlGroups}`,loadGroups,dataJson);
     }
 }
 
@@ -280,8 +280,7 @@ function selectMenue(id){
 
 
 function printResult(val){
-    var result = JSON.parse(val);
-    alert(result);
+    alert(val);
     return
 }
 

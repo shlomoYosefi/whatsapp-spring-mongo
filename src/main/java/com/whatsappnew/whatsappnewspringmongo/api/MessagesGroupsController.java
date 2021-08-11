@@ -25,12 +25,12 @@ public class MessagesGroupsController {
 
 
     @PostMapping()
-    public List<MessageGrup> addMessage(@RequestBody MessageGrup messageGrup){
+    public ResponseEntity<List<MessageGrup>> addMessage(@RequestBody MessageGrup messageGrup){
         return messageService.addMessageToGroup( messageGrup);
     }
 
     @GetMapping("/getMessagesByGroup")
-    public List<MessageGrup> getMessagesByUser(@PathParam("group") String group){
+    public ResponseEntity<List<MessageGrup>> getMessagesByUser(@PathParam("group") String group){
         System.out.println(group);
         return messageService.getAllMessageByGroup(group);
     }

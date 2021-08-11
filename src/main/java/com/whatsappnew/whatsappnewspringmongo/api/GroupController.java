@@ -4,6 +4,7 @@ import com.whatsappnew.whatsappnewspringmongo.model.User.UserOfWhatsappGrup;
 
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.whatsappnew.whatsappnewspringmongo.services.UserService;
 
@@ -23,30 +24,28 @@ public class GroupController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addGroup( @RequestBody UserOfWhatsappGrup group){
-        System.out.println("add group controller");
+    public ResponseEntity addGroup( @RequestBody UserOfWhatsappGrup group){
         return userService.addGroup(group);
     }
 
     @GetMapping()
-    public List<UserOfWhatsappGrup> getAllGroups(@PathParam("sender") String sender){
+    public ResponseEntity getAllGroups(@PathParam("sender") String sender){
         return userService.getAllGroups(sender);
     }
 
     @GetMapping("getAllUsersByGroup")
-    public List<String> getAllUsersByGroup(@PathParam("group") String group){
+    public ResponseEntity getAllUsersByGroup(@PathParam("group") String group){
         return userService.getAllUsersByGroup(group);
     }
 
     @PostMapping("/addUser")
-    public String addUserToGroup(@PathParam("group") String group, @RequestBody UserOfWhatsapp username){
+    public ResponseEntity<String> addUserToGroup(@PathParam("group") String group, @RequestBody UserOfWhatsapp username){
         System.out.println("add group controller");
         return userService.addUserToGroup(group,username.getEmail());
     }
 
     @DeleteMapping("/removeUser")
-    public String removeUserFromGroup(@PathParam("group") String group, @RequestBody UserOfWhatsapp username){
-        System.out.println("add group controller");
+    public ResponseEntity removeUserFromGroup(@PathParam("group") String group, @RequestBody UserOfWhatsapp username){
         return userService.removeUserFromGroup(group,username.getEmail());
     }
 

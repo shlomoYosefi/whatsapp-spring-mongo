@@ -2,6 +2,8 @@ package com.whatsappnew.whatsappnewspringmongo.services;
 import com.whatsappnew.whatsappnewspringmongo.model.Login.Login;
 import com.whatsappnew.whatsappnewspringmongo.model.User.UserOfWhatsapp;
 import com.whatsappnew.whatsappnewspringmongo.model.User.UserOfWhatsappGrup;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.whatsappnew.whatsappnewspringmongo.repository.GroupRepo;
 import com.whatsappnew.whatsappnewspringmongo.repository.UserRepo;
@@ -24,27 +26,27 @@ public class UserService {
     }
 
 
-        public int addUser(UserOfWhatsapp user){
-            System.out.println(userRepo.findAll());
+        public ResponseEntity addUser(UserOfWhatsapp user){
             UserOfWhatsapp user1 = userRepo.findByEmail(user.getEmail());
             System.out.println(user1);
             if(user1 ==null){
                 userRepo.insert(user);
-                return 1;
+                return ResponseEntity.status(HttpStatus.OK).body("success");
             }
-            System.out.println("not add");
-            return 0;
-    }
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("There is such a user");
 
-    public String login( Login user){
+        }
+
+    public ResponseEntity login( Login user){
         UserOfWhatsapp user1 = userRepo.findByEmail(user.getUsername());
         if(user1 !=null){
             if(user1.getPassword().equals(user.getPassword())) {
-                return user1.toString();
+                return ResponseEntity.status(HttpStatus.OK).body("success");
             }
-            return "Incorrect password";
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Incorrect password");
+
         }
-        return "There is no such user";
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body( "There is no such user");
     }
 
     public List<UserOfWhatsapp> getAllUsers() {
@@ -74,54 +76,55 @@ public class UserService {
     }
 
 
-    public String addGroup(UserOfWhatsappGrup userOfWhatsappGrup){
+    public ResponseEntity addGroup(UserOfWhatsappGrup userOfWhatsappGrup){
         UserOfWhatsappGrup group = groupRepo.findByName(userOfWhatsappGrup.getName());
-        System.out.println(group);
         if(group !=null){
-            return "There is such a name of a group";
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("There is such a name of a group");
         }
         try{
+            userOfWhatsappGrup.addUser(userOfWhatsappGrup.getCreator());
             groupRepo.insert(userOfWhatsappGrup);
-            return "success";
+            System.out.println("success");
+            return ResponseEntity.status(HttpStatus.OK).body("success");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 
-    public List<UserOfWhatsappGrup> getAllGroups(String sender){
-       return groupRepo.findAll().stream().filter(group-> group.getAllUsers().contains(sender)).collect(Collectors.toList());
+    public ResponseEntity<List<UserOfWhatsappGrup>> getAllGroups(String sender){
+       return ResponseEntity.status(HttpStatus.OK).body(groupRepo.findAll().stream().filter(group-> group.getAllUsers().contains(sender)).collect(Collectors.toList()));
     }
 
-    public List<String> getAllUsersByGroup(String name){
-        return groupRepo.findByName(name).getAllUsers();
+    public ResponseEntity getAllUsersByGroup(String name){
+        return ResponseEntity.status(HttpStatus.OK).body(groupRepo.findByName(name).getAllUsers());
     }
 
 
-    public String addUserToGroup(String group ,String username){
+    public ResponseEntity<String> addUserToGroup(String group , String username){
         UserOfWhatsappGrup  groupName = groupRepo.findByName(group);
         System.out.println("group name:  "+ groupName);
-        UserOfWhatsapp  user = userRepo.findByEmail(username);
         try {
-            groupName.addUser(user);
+            groupName.addUser(username);
             groupRepo.save(groupName);
-             return "success add user";
+             return ResponseEntity.status(HttpStatus.OK).body("success");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return  "";
+
+        return null;
     }
 
-    public String removeUserFromGroup(String group ,String username){
+    public ResponseEntity removeUserFromGroup(String group ,String username){
         UserOfWhatsappGrup  groupName = groupRepo.findByName(group);
         try {
             groupName.removeUser(username);
             groupRepo.save(groupName);
-            return "success remove user";
+            return ResponseEntity.status(HttpStatus.OK).body("success remove user");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return  "";
+        return  null;
     }
 
 
